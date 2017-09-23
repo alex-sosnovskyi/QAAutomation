@@ -13,9 +13,9 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 public abstract class BaseDriver {
     private final static String driverPath = System.getProperty("user.dir");
     private final static String separator = System.getProperty("file.separator");
-    private static WebDriver chromeDriver;
-    private static WebDriver ffDriver;
-    private static WebDriver iEDriver;
+//    private static WebDriver chromeDriver;
+//    private static WebDriver ffDriver;
+//    private static WebDriver iEDriver;
 
     private static WebDriver getChromeDriver() {
         //================================================================================
@@ -35,9 +35,9 @@ public abstract class BaseDriver {
         if (key == null) {
             System.setProperty("webdriver.chrome.driver",
                     driverPath + separator + "target" + separator + "classes" + separator + "chromedriver.exe");
-            chromeDriver = new ChromeDriver();
+//            chromeDriver =
         }
-        return chromeDriver;
+        return new ChromeDriver();
     }
 
     ;
@@ -47,9 +47,9 @@ public abstract class BaseDriver {
         if (key == null) {
             System.setProperty("webdriver.gecko.driver",
                     driverPath + separator + "target" + separator + "classes" + separator + "geckodriver.exe");
-            ffDriver=new FirefoxDriver();
+//            ffDriver=new FirefoxDriver();
         }
-        return ffDriver;
+        return new FirefoxDriver();
     }
 
     ;
@@ -59,9 +59,9 @@ public abstract class BaseDriver {
         if (key == null) {
             System.setProperty("webdriver.ie.driver",
                     driverPath + separator + "target" + separator + "classes" + separator + "IEDriverServer.exe");
-            iEDriver=new InternetExplorerDriver();
+//            iEDriver=new InternetExplorerDriver();
         }
-        return iEDriver;
+        return new InternetExplorerDriver();
     }
 
     ;
