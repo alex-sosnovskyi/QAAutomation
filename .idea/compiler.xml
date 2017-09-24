@@ -22,10 +22,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="prestashop.admin.test" />
         <module name="QAAutomation" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="prestashop.admin.test" target="1.8" />
       <module name="QAAutomation" target="1.8" />
     </bytecodeTargetLevel>
   </component>

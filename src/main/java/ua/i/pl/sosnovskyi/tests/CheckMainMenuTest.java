@@ -1,6 +1,7 @@
 package ua.i.pl.sosnovskyi.tests;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import ua.i.pl.sosnovskyi.BaseDriver;
@@ -21,28 +22,83 @@ public class CheckMainMenuTest {
         Thread.sleep(1000);
         LoginTest.navigate(driver, Properties.getBaseAdminUrl());
         LoginTest.logIn("webinar.test@gmail.com", "Xcg7299bnSmMuRLp9ITw", Thread.currentThread(), driver);
-        String currentPage=LoginTest.getCurrentUrl(driver);
-        String title=driver.getTitle();
+        String currentPage = LoginTest.getCurrentUrl(driver);
+        String title = driver.getTitle();
         System.out.println(title);
         WebElement sidebar = driver.findElement(By.id("nav-sidebar"));
         List<WebElement> li = sidebar.findElements(By.className("maintab"));
 
 //           links.stream().forEach(System.out::println);
-        List<WebElement> links=new ArrayList<>();
-        for (WebElement element:li) {
-            WebElement a = element.findElement(By.tagName("a"));
-           links.add(a);
-//            Thread.sleep(1000);
-//            System.out.println(title=driver.getTitle());
-//            System.out.println(a.getAttribute("href"));
-//            System.out.println("--------------------------------------------------");
-//            Thread.sleep(1000);
+//        List<WebElement> links = new ArrayList<>();
+//        for (WebElement element : li) {
+//            WebElement a = element.findElement(By.tagName("a"));
+//            links.add(a);
+//        }
+
+//        for (WebElement element: links) {
+//            String oldPage = driver.getCurrentUrl();
+//            element.click();
+//            Thread.sleep(5000);
+//            System.out.println(driver.getTitle());
+//            driver.navigate().refresh();
+//            Thread.sleep(5000);
+//            currentPage=driver.getCurrentUrl();
+//            System.out.println(oldPage.compareTo(currentPage));
+//            System.out.println("==================================================================");
+//        }
+//=========================================================================================================================
+        int length=li.size();
+        for(int i=0; i<length; i++){
+            System.out.println("Iteration number " +i);
+            List<WebElement> link= null;
+            try {
+                sidebar = driver.findElement(By.id("nav-sidebar"));
+                link = sidebar.findElements(By.className("maintab"));
+            } catch (NoSuchElementException e) {
+                try {
+                    sidebar=driver.findElement(By.className("nav-bar"));
+                    link=sidebar.findElements(By.className("link-levelone"));
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+//            if(sidebar==null){
+//                sidebar=driver.findElement(By.className("nav-bar"));
+//                link=sidebar.findElements(By.className("link-levelone"));
+//            }
+
+            link.get(i).click();
+            String oldPage = driver.getCurrentUrl();
+
+            Thread.sleep(5000);
+            System.out.println(driver.getTitle());
+            System.out.println("refreshig page!");
+            driver.navigate().refresh();
+            Thread.sleep(5000);
+            System.out.println("After refreshing page "+driver.getTitle());
+            currentPage=driver.getCurrentUrl();
+            System.out.println("Page after refreshing is the same? -"+oldPage.equals(currentPage));
+            System.out.println("==================================================================");
+
         }
+        //==================================================================================================================
+//        li.get(5).click();
+//        String oldPage = driver.getCurrentUrl();
+//
+//        Thread.sleep(5000);
+//        System.out.println(driver.getTitle());
+//        System.out.println("refreshig page!");
+//        driver.navigate().refresh();
+//        Thread.sleep(5000);
+//        System.out.println("After refreshing page "+driver.getTitle());
+//        currentPage=driver.getCurrentUrl();
+//        System.out.println("Page after refreshing is the same? -"+oldPage.equals(currentPage));
+//        System.out.println("==================================================================");
+//        sidebar = driver.findElement(By.id("nav-sidebar"));
+//        li = sidebar.findElements(By.className("maintab"));
+//        li.get(5).click();
 
-
-        //driver.navigate().refresh();
-
-        Thread.sleep(10000);
+        Thread.sleep(5000);
         LoginTest.exit(driver);
     }
 }
