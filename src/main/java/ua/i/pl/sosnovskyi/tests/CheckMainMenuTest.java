@@ -7,7 +7,6 @@ import org.openqa.selenium.WebElement;
 import ua.i.pl.sosnovskyi.BaseDriver;
 import ua.i.pl.sosnovskyi.utils.Properties;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,78 +14,54 @@ import java.util.List;
  */
 public class CheckMainMenuTest {
 //    private static WebDriver driver = BaseDriver.getDriver(Properties.getBrowser());
-public static void menuTest(int size){
-
+private static void menuTest(int length, WebDriver driver) throws InterruptedException{
+    for(int i=0; i<length; i++){
+        List<WebElement> link= null;
+        try {
+           WebElement sidebar = driver.findElement(By.id("nav-sidebar"));
+            link = sidebar.findElements(By.className("maintab"));
+        } catch (NoSuchElementException e) {
+            try {
+                WebElement  sidebar=driver.findElement(By.className("nav-bar"));
+                link=sidebar.findElements(By.className("link-levelone"));
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+        try {
+            if (link != null) {
+                link.get(i).click();
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        String oldPage = driver.getCurrentUrl();
+        Thread.sleep(5000);
+        System.out.println(driver.getTitle());
+        System.out.println("refreshig page!");
+        driver.navigate().refresh();
+        Thread.sleep(5000);
+        System.out.println("After refreshing page "+driver.getTitle());
+        String currentPage=driver.getCurrentUrl();
+        System.out.println("Is it the same page? -"+oldPage.equals(currentPage));
+        System.out.println("==================================================================");
+    }
 }
     public static void main(String[] args) throws InterruptedException {
         WebDriver driver = BaseDriver.getDriver(Properties.getBrowser());
         LoginTest.maximize(driver);
         Thread.sleep(1000);
         LoginTest.navigate(driver, Properties.getBaseAdminUrl());
-        LoginTest.logIn("webinar.test@gmail.com", "Xcg7299bnSmMuRLp9ITw", Thread.currentThread(), driver);
-        String currentPage = LoginTest.getCurrentUrl(driver);
-        String title = driver.getTitle();
-    //    System.out.println(title);
+        LoginTest.logIn("webinar.test@gmail.com", "Xcg7299bnSmMuRLp9ITw", driver);
+//       String currentPage =LoginTest.getCurrentUrl(driver);
+      //  String title = driver.getTitle();
         WebElement sidebar = driver.findElement(By.id("nav-sidebar"));
         List<WebElement> li = sidebar.findElements(By.className("maintab"));
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//        for (WebElement element: links) {
-//            String oldPage = driver.getCurrentUrl();
-//            element.click();
-//            Thread.sleep(5000);
-//            System.out.println(driver.getTitle());
-//            driver.navigate().refresh();
-//            Thread.sleep(5000);
-//            currentPage=driver.getCurrentUrl();
-//            System.out.println(oldPage.compareTo(currentPage));
-//            System.out.println("==================================================================");
-//        }
-//=========================================================================================================================
-        int length=li.size();
-        for(int i=0; i<length; i++){
-          //  System.out.println("Iteration number " +i);
-            List<WebElement> link= null;
-            try {
-                sidebar = driver.findElement(By.id("nav-sidebar"));
-                link = sidebar.findElements(By.className("maintab"));
-            } catch (NoSuchElementException e) {
-                try {
-                    sidebar=driver.findElement(By.className("nav-bar"));
-                    link=sidebar.findElements(By.className("link-levelone"));
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-            }
-            link.get(i).click();
-            String oldPage = driver.getCurrentUrl();
-            Thread.sleep(5000);
-            System.out.println(driver.getTitle());
-            System.out.println("refreshig page!");
-            driver.navigate().refresh();
-            Thread.sleep(5000);
-            System.out.println("After refreshing page "+driver.getTitle());
-            currentPage=driver.getCurrentUrl();
-            System.out.println("Is it the same page? -"+oldPage.equals(currentPage));
-            System.out.println("==================================================================");
-
-        }
-        //==================================================================================================================
-//        li.get(5).click();
-//        String oldPage = driver.getCurrentUrl();
-//
-//        Thread.sleep(5000);
-//        System.out.println(driver.getTitle());
-//        System.out.println("refreshig page!");
-//        driver.navigate().refresh();
-//        Thread.sleep(5000);
-//        System.out.println("After refreshing page "+driver.getTitle());
-//        currentPage=driver.getCurrentUrl();
-//        System.out.println("Page after refreshing is the same? -"+oldPage.equals(currentPage));
-//        System.out.println("==================================================================");
-//        sidebar = driver.findElement(By.id("nav-sidebar"));
-//        li = sidebar.findElements(By.className("maintab"));
-//        li.get(5).click();
-
+        menuTest(li.size(), driver);
+//        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         Thread.sleep(5000);
         LoginTest.exit(driver);
     }
